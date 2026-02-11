@@ -69,5 +69,5 @@ To update the preview image in this README:
 ---
 
 <p align="center">
-  Built with ❤️ by ProShot AI Team
+  Built with love from <a href="https://starteder.com">StarterDev</a>
 </p>

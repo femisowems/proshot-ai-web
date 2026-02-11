@@ -368,7 +368,7 @@ const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="py-8 px-6 text-center text-gray-400 text-xs border-t border-gray-100 mt-auto">
-        <p>&copy; {new Date().getFullYear()} ProShot AI Photographer. Powered by Gemini 2.5 Flash Image.</p>
+        <p>Built with love from <a href="https://starteder.com" className="hover:text-gray-600 underline">StarterDev</a></p>
         <div className="mt-2 flex justify-center gap-4">
           <a href="#" className="hover:text-gray-600">Privacy Policy</a>
           <a href="#" className="hover:text-gray-600">Terms of Service</a>
