@@ -69,5 +69,5 @@ To update the preview image in this README:
 ---
 
 <p align="center">
-  Built with love from <a href="https://starteder.com">StarterDev</a>
+  Built with love from <a href="https://starterdev.com">StarterDev</a>
 </p>

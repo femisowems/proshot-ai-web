@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import { AppStep, HeadshotStyle } from './types';
 import { HEADSHOT_STYLES } from './constants';
 import { generateHeadshot, editHeadshot } from './services/gemini';
@@ -17,6 +17,7 @@ import {
   CheckCircle2,
   AlertCircle
 } from 'lucide-react';
+import { ImageUpload } from './components/ImageUpload';
 
 const App: React.FC = () => {
   const [step, setStep] = useState<AppStep>(AppStep.UPLOAD);
@@ -26,20 +27,6 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [editPrompt, setEditPrompt] = useState('');
   const [error, setError] = useState<string | null>(null);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSourceImage(reader.result as string);
-        setStep(AppStep.STYLE);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
 
   const handleStyleSelect = (style: HeadshotStyle) => {
     setSelectedStyle(style);
@@ -136,27 +123,10 @@ const App: React.FC = () => {
               <p className="text-lg text-gray-500">Upload a casual selfie and let our AI photographer handle the lighting, background, and wardrobe.</p>
             </div>
 
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-gray-300 rounded-3xl p-12 text-center hover:border-indigo-400 hover:bg-indigo-50 transition-all cursor-pointer group"
-            >
-              <input
-                type="file"
-                className="hidden"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-              />
-              <div className="flex flex-col items-center gap-4">
-                <div className="p-6 bg-indigo-50 rounded-full group-hover:scale-110 transition-transform">
-                  <Upload className="w-10 h-10 text-indigo-600" />
-                </div>
-                <div>
-                  <p className="text-xl font-semibold text-gray-900">Click to upload or drag and drop</p>
-                  <p className="text-gray-500 mt-1">PNG, JPG or WebP (max. 10MB)</p>
-                </div>
-              </div>
-            </div>
+            <ImageUpload onImageSelect={(base64) => {
+              setSourceImage(base64);
+              setStep(AppStep.STYLE);
+            }} />
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-500">
               <div className="flex items-center gap-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -368,7 +338,7 @@ const App: React.FC = () => {
 
       {/* Footer */}
       <footer className="py-8 px-6 text-center text-gray-400 text-xs border-t border-gray-100 mt-auto">
-        <p>Built with love from <a href="https://starteder.com" className="hover:text-gray-600 underline">StarterDev</a></p>
+        <p>Built with love from <a href="https://starterdev.com" className="hover:text-gray-600 underline">StarterDev</a></p>
         <div className="mt-2 flex justify-center gap-4">
           <a href="#" className="hover:text-gray-600">Privacy Policy</a>
           <a href="#" className="hover:text-gray-600">Terms of Service</a>
