@@ -1,0 +1,7 @@
+{
+  "name": "ProShot AI web app",
+  "description": "Professional AI Headshot Photographer. Transform casual selfies into high-end corporate or lifestyle headshots using Gemini 2.5 Flash Image.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
