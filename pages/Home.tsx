@@ -150,8 +150,8 @@ const Home: React.FC = () => {
                 {step === AppStep.UPLOAD && (
                     <div className="w-full max-w-2xl flex flex-col gap-8 animate-in fade-in duration-500">
                         <div className="text-center space-y-4">
-                            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">Create your dream headshot in seconds</h2>
-                            <p className="text-lg text-gray-500">Upload a casual selfie and let our AI photographer handle the lighting, background, and wardrobe.</p>
+                            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">Turn Selfies into Professional Headshots</h2>
+                            <p className="text-lg text-gray-500">Get studio-quality photos for LinkedIn, resumes, and social profiles in seconds. No photographer required.</p>
                         </div>
 
                         <ImageUpload onImageSelect={(base64) => {
