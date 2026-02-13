@@ -18,7 +18,14 @@ export async function generateHeadshot(base64Image: string, stylePrompt: string)
             },
           },
           {
-            text: `Please transform this casual photo into a professional headshot. Use the following style description: ${stylePrompt}. Maintain the person's facial features and likeness while upgrading the clothing, lighting, and background to look professional and high-quality. Only return the image.`,
+            text: `Please transform this casual photo into a professional headshot. Use the following style description: ${stylePrompt}. 
+            
+            IMPORTANT:
+            - Maintain the person's exact facial features and likeness (identity preservation is critical).
+            - Upgrade clothing, lighting, and background to look like a high-end studio photo (8k resolution, photorealistic).
+            - Ensure natural skin texture (avoid plastic/smooth skin).
+            - NO cartoons, NO illustrations, NO distorted features, NO artifacts.
+            - Only return the image.`,
           },
         ],
       },
