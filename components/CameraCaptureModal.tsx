@@ -129,11 +129,11 @@ export const CameraCaptureModal: React.FC<CameraCaptureModalProps> = ({ onCaptur
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative flex flex-col max-h-[90vh]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-200">
+            <div className="bg-white rounded-none sm:rounded-3xl w-full h-full sm:h-auto sm:max-w-lg overflow-hidden shadow-2xl relative flex flex-col sm:max-h-[90vh]">
 
                 {/* Header */}
-                <div className="p-4 flex items-center justify-between border-b border-gray-100">
+                <div className="p-4 flex items-center justify-between border-b border-gray-100 bg-white shrink-0">
                     <h3 className="font-semibold text-lg text-gray-900 flex items-center gap-2">
                         <Camera className="w-5 h-5 text-indigo-600" />
                         Take a Selfie
@@ -148,7 +148,7 @@ export const CameraCaptureModal: React.FC<CameraCaptureModalProps> = ({ onCaptur
                 </div>
 
                 {/* Camera Viewport */}
-                <div className="relative aspect-square w-full bg-black overflow-hidden group">
+                <div className="relative aspect-square w-full bg-black overflow-hidden group shrink-0">
 
                     {/* Video Element */}
                     <video
@@ -197,7 +197,7 @@ export const CameraCaptureModal: React.FC<CameraCaptureModalProps> = ({ onCaptur
                 </div>
 
                 {/* Footer / Controls */}
-                <div className="p-6 bg-white space-y-4">
+                <div className="p-6 bg-white space-y-4 flex-1 flex flex-col justify-center pb-[env(safe-area-inset-bottom)]">
 
                     {/* Helper Text */}
                     {cameraState === 'live' && (
@@ -222,16 +222,16 @@ export const CameraCaptureModal: React.FC<CameraCaptureModalProps> = ({ onCaptur
                             <>
                                 <button
                                     onClick={handleRetake}
-                                    className="flex-1 py-3 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                                    className="flex-1 py-4 px-4 rounded-xl border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 h-14"
                                 >
-                                    <RefreshCw className="w-4 h-4" />
+                                    <RefreshCw className="w-5 h-5" />
                                     Retake
                                 </button>
                                 <button
                                     onClick={handleConfirm}
-                                    className="flex-1 py-3 px-4 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors shadow-sm flex items-center justify-center gap-2"
+                                    className="flex-1 py-4 px-4 rounded-xl bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-colors shadow-sm flex items-center justify-center gap-2 h-14"
                                 >
-                                    <Check className="w-4 h-4" />
+                                    <Check className="w-5 h-5" />
                                     Use Photo
                                 </button>
                             </>

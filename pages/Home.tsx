@@ -14,7 +14,10 @@ import {
     Loader2,
     CheckCircle2,
     AlertCircle,
-    RefreshCw
+    RefreshCw,
+    UserCheck,
+    Aperture,
+    Wand2
 } from 'lucide-react';
 import { ImageUpload } from '../components/ImageUpload';
 
@@ -149,9 +152,9 @@ const Home: React.FC = () => {
 
                 {step === AppStep.UPLOAD && (
                     <div className="w-full max-w-2xl flex flex-col gap-8 animate-in fade-in duration-500">
-                        <div className="text-center space-y-4">
-                            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">Turn Selfies into Professional Headshots</h2>
-                            <p className="text-lg text-gray-500">Get studio-quality photos for LinkedIn, resumes, and social profiles in seconds. No photographer required.</p>
+                        <div className="text-center space-y-4 py-8 sm:py-16">
+                            <h2 className="text-2xl sm:text-4xl font-extrabold text-gray-900 mx-auto max-w-md sm:max-w-none text-balance">Turn Selfies into Professional Headshots</h2>
+                            <p className="text-base sm:text-lg text-gray-500 px-4">Get studio-quality photos for LinkedIn, resumes, and social profiles in seconds. No photographer required.</p>
                         </div>
 
                         <ImageUpload onImageSelect={(base64) => {
@@ -159,17 +162,23 @@ const Home: React.FC = () => {
                             setStep(AppStep.STYLE);
                         }} />
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-gray-500">
-                            <div className="flex items-center gap-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                                <CheckCircle2 className="text-green-500 w-5 h-5" />
-                                <span>Keep your likeness</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-6 text-xs sm:text-sm text-gray-700 font-medium">
+                            <div className="flex items-center gap-3 bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                                <div className="p-2 bg-blue-50 rounded-lg shrink-0">
+                                    <UserCheck className="text-blue-600 w-4 h-4 sm:w-5 sm:h-5" />
+                                </div>
+                                <span>Keep likeness</span>
                             </div>
-                            <div className="flex items-center gap-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                                <CheckCircle2 className="text-green-500 w-5 h-5" />
+                            <div className="flex items-center gap-3 bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                                <div className="p-2 bg-amber-50 rounded-lg shrink-0">
+                                    <Aperture className="text-amber-600 w-4 h-4 sm:w-5 sm:h-5" />
+                                </div>
                                 <span>Pro studio lighting</span>
                             </div>
-                            <div className="flex items-center gap-2 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                                <CheckCircle2 className="text-green-500 w-5 h-5" />
+                            <div className="flex items-center gap-3 bg-white p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100">
+                                <div className="p-2 bg-purple-50 rounded-lg shrink-0">
+                                    <Wand2 className="text-purple-600 w-4 h-4 sm:w-5 sm:h-5" />
+                                </div>
                                 <span>Unlimited edits</span>
                             </div>
                         </div>
@@ -198,7 +207,7 @@ const Home: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                             {HEADSHOT_STYLES.map((style) => (
                                 <div
                                     key={style.id}
@@ -227,7 +236,7 @@ const Home: React.FC = () => {
                             <button
                                 disabled={!selectedStyle || isLoading}
                                 onClick={handleGenerate}
-                                className="flex items-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-indigo-100 transition-all hover:-translate-y-1"
+                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-indigo-100 transition-all hover:-translate-y-1"
                             >
                                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
                                 Generate My Headshot

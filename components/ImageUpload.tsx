@@ -166,33 +166,33 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
         <div className="w-full max-w-2xl mx-auto">
             {/* Tabs */}
             <div className="flex justify-center mb-6">
-                <div className="bg-gray-100 p-1 rounded-xl inline-flex relative">
+                <div className="bg-gray-100 p-1 rounded-xl inline-flex flex-col sm:flex-row relative w-full sm:w-auto gap-1 sm:gap-0">
                     <button
                         onClick={() => setActiveTab('upload')}
-                        className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'upload'
+                        className={`px-6 py-3 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto ${activeTab === 'upload'
                             ? 'bg-white text-indigo-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <Upload className="w-4 h-4" />
-                        Upload Image
+                        Upload
                     </button>
                     <button
                         onClick={() => setActiveTab('url')}
-                        className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'url'
+                        className={`px-6 py-3 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto ${activeTab === 'url'
                             ? 'bg-white text-indigo-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <Link className="w-4 h-4" />
-                        Paste URL
+                        URL
                     </button>
                     <button
                         onClick={() => setShowCameraModal(true)}
-                        className="px-6 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all duration-200 flex items-center gap-2"
+                        className="px-6 py-3 sm:py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto"
                     >
                         <Camera className="w-4 h-4" />
-                        Take Selfie
+                        Selfie
                     </button>
                 </div>
             </div>
@@ -206,7 +206,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`border-2 border-dashed rounded-3xl p-12 text-center transition-all cursor-pointer group animate-in fade-in zoom-in duration-300 ${isDragging
+                        className={`border-2 border-dashed rounded-3xl p-6 sm:p-12 text-center transition-all cursor-pointer group animate-in fade-in zoom-in duration-300 ${isDragging
                             ? 'border-indigo-500 bg-indigo-50 scale-[1.02]'
                             : 'border-gray-200 hover:border-indigo-400 hover:bg-indigo-50'
                             }`}
