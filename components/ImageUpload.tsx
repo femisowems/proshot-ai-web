@@ -189,20 +189,21 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
         <div className="w-full max-w-2xl mx-auto">
             {/* Tabs */}
             <div className="flex justify-center mb-6">
-                <div className="bg-gray-100 p-1 rounded-xl inline-flex flex-col sm:flex-row relative w-full sm:w-auto gap-1 sm:gap-0">
+                <div className="bg-gray-100 p-1 rounded-xl inline-flex flex-row relative w-full sm:w-auto gap-1">
                     <button
                         onClick={() => setActiveTab('upload')}
-                        className={`px-6 py-3 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto ${activeTab === 'upload'
+                        className={`px-3 py-3 sm:px-6 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 flex-1 sm:flex-none sm:w-auto ${activeTab === 'upload'
                             ? 'bg-white text-indigo-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <Upload className="w-4 h-4" />
-                        Upload
+                        <span className="hidden sm:inline">Upload</span>
+                        <span className="sm:hidden">Upload</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('url')}
-                        className={`px-6 py-3 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto ${activeTab === 'url'
+                        className={`px-3 py-3 sm:px-6 sm:py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center justify-center gap-2 flex-1 sm:flex-none sm:w-auto ${activeTab === 'url'
                             ? 'bg-white text-indigo-600 shadow-sm'
                             : 'text-gray-500 hover:text-gray-700'
                             }`}
@@ -212,7 +213,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
                     </button>
                     <button
                         onClick={() => setShowCameraModal(true)}
-                        className="px-6 py-3 sm:py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all duration-200 flex items-center justify-center gap-2 w-full sm:w-auto"
+                        className="px-3 py-3 sm:px-6 sm:py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all duration-200 flex items-center justify-center gap-2 flex-1 sm:flex-none sm:w-auto"
                     >
                         <Camera className="w-4 h-4" />
                         Selfie
