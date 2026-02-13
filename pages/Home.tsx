@@ -54,6 +54,7 @@ const Home: React.FC = () => {
     const [editPrompt, setEditPrompt] = useState('');
     const [currentSuggestions, setCurrentSuggestions] = useState<string[]>(getRandomSuggestions());
     const [error, setError] = useState<string | null>(null);
+    const [cropStatus, setCropStatus] = useState<boolean | null>(null);
 
     const handleStyleSelect = (style: HeadshotStyle) => {
         setSelectedStyle(style);
@@ -103,7 +104,9 @@ const Home: React.FC = () => {
         setSourceImage(null);
         setSelectedStyle(null);
         setResultImage(null);
+        setResultImage(null);
         setError(null);
+        setCropStatus(null);
         setCurrentSuggestions(getRandomSuggestions());
     };
 
@@ -157,8 +160,9 @@ const Home: React.FC = () => {
                             <p className="text-base sm:text-lg text-gray-500 px-4">Get studio-quality photos for LinkedIn, resumes, and social profiles in seconds. No photographer required.</p>
                         </div>
 
-                        <ImageUpload onImageSelect={(base64) => {
+                        <ImageUpload onImageSelect={(base64, wasCropped) => {
                             setSourceImage(base64);
+                            setCropStatus(wasCropped);
                             setStep(AppStep.STYLE);
                         }} />
 

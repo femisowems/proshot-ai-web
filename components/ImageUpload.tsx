@@ -3,9 +3,10 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Upload, Link, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2, Camera } from 'lucide-react';
 import { CameraCaptureModal } from './CameraCaptureModal';
 import { resizeImage } from '../utils/image';
+import { smartCropToHeadshot } from '../utils/smartCrop';
 
 interface ImageUploadProps {
-    onImageSelect: (base64: string) => void;
+    onImageSelect: (base64: string, wasCropped: boolean) => void;
 }
 
 type Tab = 'upload' | 'url';
@@ -17,12 +18,13 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
     const [validationState, setValidationState] = useState<'idle' | 'validating' | 'valid' | 'invalid'>('idle');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [showCameraModal, setShowCameraModal] = useState(false);
+    const [isOptimizing, setIsOptimizing] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // --- File Handling ---
 
-    const processFile = useCallback((file: File) => {
+    const processFile = useCallback(async (file: File) => {
         if (!file.type.startsWith('image/')) {
             setErrorMsg("Please upload a valid image file (JPG, PNG, WebP).");
             return;
@@ -34,12 +36,33 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
             return;
         }
 
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            const result = reader.result as string;
-            onImageSelect(result); // Pass up to parent
-        };
-        reader.readAsDataURL(file);
+        setIsOptimizing(true);
+        setErrorMsg(null);
+
+        try {
+            // Apply Smart Crop
+            const result = await smartCropToHeadshot(file);
+            const processedFile = result.file;
+            const wasCropped = result.wasCropped;
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64 = reader.result as string;
+                setIsOptimizing(false);
+                onImageSelect(base64, wasCropped); // Pass up to parent
+            };
+            reader.readAsDataURL(processedFile);
+
+        } catch (error) {
+            console.error("Processing error:", error);
+            setIsOptimizing(false);
+            // Fallback to original if something fails, though smartCrop handles errors gracefully
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                onImageSelect(reader.result as string, false);
+            };
+            reader.readAsDataURL(file);
+        }
     }, [onImageSelect]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
