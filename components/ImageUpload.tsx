@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Upload, Link, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, Link, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2, Camera } from 'lucide-react';
+import { CameraCaptureModal } from './CameraCaptureModal';
 import { resizeImage } from '../utils/image';
 
 interface ImageUploadProps {
@@ -15,6 +16,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [validationState, setValidationState] = useState<'idle' | 'validating' | 'valid' | 'invalid'>('idle');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [showCameraModal, setShowCameraModal] = useState(false);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -168,8 +170,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
                     <button
                         onClick={() => setActiveTab('upload')}
                         className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'upload'
-                                ? 'bg-white text-indigo-600 shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700'
+                            ? 'bg-white text-indigo-600 shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <Upload className="w-4 h-4" />
@@ -178,12 +180,19 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
                     <button
                         onClick={() => setActiveTab('url')}
                         className={`px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${activeTab === 'url'
-                                ? 'bg-white text-indigo-600 shadow-sm'
-                                : 'text-gray-500 hover:text-gray-700'
+                            ? 'bg-white text-indigo-600 shadow-sm'
+                            : 'text-gray-500 hover:text-gray-700'
                             }`}
                     >
                         <Link className="w-4 h-4" />
                         Paste URL
+                    </button>
+                    <button
+                        onClick={() => setShowCameraModal(true)}
+                        className="px-6 py-2 rounded-lg text-sm font-medium text-gray-500 hover:text-gray-700 transition-all duration-200 flex items-center gap-2"
+                    >
+                        <Camera className="w-4 h-4" />
+                        Take Selfie
                     </button>
                 </div>
             </div>
@@ -198,8 +207,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
                         onDrop={handleDrop}
                         onClick={() => fileInputRef.current?.click()}
                         className={`border-2 border-dashed rounded-3xl p-12 text-center transition-all cursor-pointer group animate-in fade-in zoom-in duration-300 ${isDragging
-                                ? 'border-indigo-500 bg-indigo-50 scale-[1.02]'
-                                : 'border-gray-200 hover:border-indigo-400 hover:bg-indigo-50'
+                            ? 'border-indigo-500 bg-indigo-50 scale-[1.02]'
+                            : 'border-gray-200 hover:border-indigo-400 hover:bg-indigo-50'
                             }`}
                     >
                         <input
@@ -275,6 +284,16 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageSelect }) => {
                 <div className="mt-4 text-center text-red-500 text-sm bg-red-50 p-2 rounded-lg">
                     {errorMsg}
                 </div>
+            )}
+            {/* Camera Modal */}
+            {showCameraModal && (
+                <CameraCaptureModal
+                    onCapture={(file) => {
+                        processFile(file);
+                        setShowCameraModal(false);
+                    }}
+                    onClose={() => setShowCameraModal(false)}
+                />
             )}
         </div>
     );
