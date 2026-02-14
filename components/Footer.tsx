@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
             <div className="mt-2 flex flex-row justify-center gap-4">
                 <Link to="/privacy" className="hover:text-gray-600">Privacy Policy</Link>
                 <Link to="/terms" className="hover:text-gray-600">Terms of Service</Link>
-                <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-medium self-center">v1.1.0 • Feb 14, 11:27 AM</span>
+                <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-medium self-center">v{__APP_VERSION__} • {__BUILD_TIMESTAMP__}</span>
             </div>
         </footer>
     );
