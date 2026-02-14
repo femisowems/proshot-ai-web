@@ -31,7 +31,7 @@ export const HeadshotGallery: React.FC<HeadshotGalleryProps> = ({ results, selec
                                 onSelect(headshot.id);
                             }
                         }}
-                        className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-4 focus:ring-indigo-100 ${isSelected
+                        className={`relative aspect-[4/5] rounded-xl overflow-hidden cursor-pointer transition-all duration-200 group focus:outline-none focus:ring-4 focus:ring-indigo-100 ${isSelected
                             ? 'ring-4 ring-indigo-600 border-2 border-transparent scale-[1.02]'
                             : 'border-2 border-gray-100 hover:border-indigo-200 hover:scale-[1.02]'
                             }`}

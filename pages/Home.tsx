@@ -163,13 +163,16 @@ const Home: React.FC = () => {
         <div className="min-h-screen flex flex-col">
             {/* Header */}
             <header className="bg-white border-b border-gray-200 py-4 px-6 flex md:grid md:grid-cols-3 justify-between items-center sticky top-0 z-10">
-                <div className="flex items-center gap-2 md:justify-self-start" onClick={reset} style={{ cursor: 'pointer' }}>
-                    <div className="bg-indigo-600 p-2 rounded-lg">
-                        <Camera className="text-white w-6 h-6" />
+                <div className="flex items-center gap-3 md:justify-self-start" onClick={reset} style={{ cursor: 'pointer' }}>
+                    <div className="bg-indigo-600 p-2.5 rounded-xl text-white">
+                        <Camera className="w-6 h-6" />
                     </div>
-                    <h1 className="text-xl font-bold tracking-tight text-gray-900 flex items-baseline gap-1">
-                        ProShot AI <span className="text-sm font-normal text-gray-500">by <sub><a href="https://starterdev.com" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 hover:underline">starterdev.io</a></sub></span>
-                    </h1>
+                    <div className="flex flex-col leading-none">
+                        <h1 className="text-xl font-bold tracking-tight text-gray-900">
+                            ProShot AI
+                        </h1>
+                        <span className="text-xs text-gray-400 font-medium">by <a href="https://starterdev.com" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 hover:underline">starterdev.io</a></span>
+                    </div>
                 </div>
 
                 <div className="hidden md:flex items-center gap-4 text-sm font-medium md:justify-self-center">
@@ -350,7 +353,7 @@ const Home: React.FC = () => {
 
                         <div className="flex flex-col gap-8">
                             {/* Selected Image Large Preview */}
-                            <div className="w-full max-w-md mx-auto aspect-[4/5] sm:aspect-square bg-white p-2 rounded-3xl shadow-2xl border border-gray-100 relative group overflow-hidden">
+                            <div className="w-full max-w-md mx-auto aspect-[4/5] bg-white p-2 rounded-3xl shadow-2xl border border-gray-100 relative group overflow-hidden">
                                 {selectedId && (
                                     <img
                                         src={results.find(r => r.id === selectedId)?.url}
