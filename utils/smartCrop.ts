@@ -2,12 +2,43 @@
 import { FaceDetection, Results } from '@mediapipe/face_detection';
 
 /**
- * Loads an image from a File object into an HTMLImageElement.
+ * Loads an image from a File object into an HTMLCanvasElement, 
+ * correcting for EXIF orientation using createImageBitmap if available.
  */
-const loadImage = (file: File): Promise<HTMLImageElement> => {
+const loadImageToCanvas = async (file: File): Promise<HTMLCanvasElement> => {
+    // 1. Try createImageBitmap (modern, handles orientation)
+    if ('createImageBitmap' in window) {
+        try {
+            const bitmap = await createImageBitmap(file);
+            const canvas = document.createElement('canvas');
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.drawImage(bitmap, 0, 0);
+                bitmap.close();
+                return canvas;
+            }
+        } catch (e) {
+            console.warn("createImageBitmap failed, falling back to Image", e);
+        }
+    }
+
+    // 2. Fallback to Image (might lose orientation on some older browsers/contexts)
     return new Promise((resolve, reject) => {
         const img = new Image();
-        img.onload = () => resolve(img);
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.drawImage(img, 0, 0);
+                resolve(canvas);
+            } else {
+                reject(new Error("Failed to get canvas context"));
+            }
+        };
         img.onerror = reject;
         img.src = URL.createObjectURL(file);
     });
@@ -25,7 +56,8 @@ const loadImage = (file: File): Promise<HTMLImageElement> => {
  */
 export async function smartCropToHeadshot(file: File): Promise<{ file: File; wasCropped: boolean }> {
     try {
-        const img = await loadImage(file);
+        // Load to canvas instead of Image to ensure orientation is baked in
+        const imgCanvas = await loadImageToCanvas(file);
 
         // Initialize FaceDetection
         const faceDetection = new FaceDetection({
@@ -67,8 +99,8 @@ export async function smartCropToHeadshot(file: File): Promise<{ file: File; was
                 const bbox = primaryFace.boundingBox;
 
                 // bbox is relative (0.0 - 1.0)
-                const imgW = img.width;
-                const imgH = img.height;
+                const imgW = imgCanvas.width;
+                const imgH = imgCanvas.height;
 
                 const faceX = bbox.xCenter * imgW;
                 const faceY = bbox.yCenter * imgH;
@@ -88,17 +120,13 @@ export async function smartCropToHeadshot(file: File): Promise<{ file: File; was
                 let cropX = faceX - (cropSize / 2);
 
                 // Vertical positioning: 
-                // We want eyes to be roughly at the 1/3 - 40% line. 
-                // MediaPipe bbox yCenter is roughly the middle of the face box (nose area).
-                // If we put the face center at ~45% of the crop height, it usually looks good.
-                let cropY = faceY - (cropSize * 0.45);
+                // We want to center the face vertically a bit more.
+                // Previously used 0.45 (eyes at 45%). 
+                // Let's try 0.5 (face center at 50%) which is geometrically centered.
+                // This might cut off less chin/neck if that was the issue.
+                let cropY = faceY - (cropSize * 0.5);
 
                 // 4. Constraint / Clamp to Image Bounds
-                // If the crop extends outside, we might need to shift it or shrink it, 
-                // but shrinking breaks our "shoulders" guarantee. 
-                // For a simple implementation, we shift to fits, then if it still doesn't fit (image too small), we might pad or just take max possible.
-                // However, LinkedIn/Headshots usually prioritize the subject, so we might zoom in/crop tighter if needed.
-
                 // Let's shift to keep within bounds first
                 if (cropX < 0) cropX = 0;
                 if (cropY < 0) cropY = 0;
@@ -132,7 +160,7 @@ export async function smartCropToHeadshot(file: File): Promise<{ file: File; was
                 ctx.fillRect(0, 0, 1024, 1024);
 
                 ctx.drawImage(
-                    img,
+                    imgCanvas,
                     cropX, cropY, finalCropSize, finalCropSize, // Source rect
                     0, 0, 1024, 1024 // Dest rect
                 );
@@ -148,8 +176,9 @@ export async function smartCropToHeadshot(file: File): Promise<{ file: File; was
                 }, 'image/jpeg', 0.95);
             });
 
-            // Start detection
-            faceDetection.send({ image: img });
+            // Start detection - Pass the canvas!
+            // MediaPipe accepts HTMLCanvasElement
+            faceDetection.send({ image: imgCanvas });
         });
 
     } catch (error) {

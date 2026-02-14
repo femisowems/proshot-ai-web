@@ -320,7 +320,7 @@ const Home: React.FC = () => {
                         <div className="relative mb-10">
                             <div className="w-48 h-48 rounded-full border-4 border-indigo-100 flex items-center justify-center overflow-hidden">
                                 {sourceImage && (
-                                    <img src={sourceImage} className="w-full h-full object-cover opacity-50 grayscale" alt="Source" />
+                                    <img src={sourceImage} className="w-full h-full object-cover object-top opacity-50 grayscale" alt="Source" />
                                 )}
                             </div>
                             <div className="absolute inset-0 flex items-center justify-center">
