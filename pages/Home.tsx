@@ -321,11 +321,11 @@ const Home: React.FC = () => {
                 {step === AppStep.GENERATING && (
                     <div className="w-full max-w-md flex flex-col items-center justify-center py-20 animate-in zoom-in-95 duration-500">
                         <div className="relative mb-10">
-                            <div className="w-48 h-48 rounded-full border-4 border-indigo-100 flex items-center justify-center overflow-hidden">
+                            <div className="w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-indigo-100 flex items-center justify-center overflow-hidden">
                                 {sourceImage && (
                                     <img
                                         src={sourceImage}
-                                        className="h-full w-full object-cover object-center translate-y-[-6%] sm:translate-y-0 opacity-50 grayscale"
+                                        className="h-full w-full object-cover object-center opacity-50 grayscale"
                                         alt="Source"
                                     />
                                 )}
