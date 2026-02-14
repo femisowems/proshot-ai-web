@@ -75,8 +75,9 @@ const Home: React.FC = () => {
         setSelectedStyle(style);
     };
 
-    const handleGenerate = async () => {
-        if (!sourceImage || !selectedStyle) return;
+    const handleGenerate = async (styleOverride?: HeadshotStyle) => {
+        const styleToUse = styleOverride || selectedStyle;
+        if (!sourceImage || !styleToUse) return;
 
         setIsLoading(true);
         setStep(AppStep.GENERATING);
@@ -92,7 +93,7 @@ const Home: React.FC = () => {
             ];
 
             const promises = modifiers.map(modifier =>
-                generateHeadshot(sourceImage, selectedStyle.prompt, modifier)
+                generateHeadshot(sourceImage, styleToUse.prompt, modifier)
             );
 
             const generatedImages = await Promise.all(promises);
@@ -284,7 +285,20 @@ const Home: React.FC = () => {
                             {HEADSHOT_STYLES.map((style) => (
                                 <div
                                     key={style.id}
-                                    onClick={() => handleStyleSelect(style)}
+                                    onClick={() => {
+                                        handleStyleSelect(style);
+                                        // Auto-generate on mobile (width < 640px to match sm: breakpoint)
+                                        if (typeof window !== 'undefined' && window.innerWidth < 640) {
+                                            handleGenerate(style);
+                                        }
+                                    }}
+                                    onDoubleClick={() => {
+                                        // Auto-generate on desktop
+                                        if (typeof window !== 'undefined' && window.innerWidth >= 640) {
+                                            handleStyleSelect(style);
+                                            handleGenerate(style);
+                                        }
+                                    }}
                                     className={`relative group cursor-pointer rounded-2xl overflow-hidden border-2 transition-all ${selectedStyle?.id === style.id
                                         ? 'border-indigo-600 ring-4 ring-indigo-50'
                                         : 'border-transparent hover:border-indigo-200'
@@ -308,8 +322,8 @@ const Home: React.FC = () => {
                         <div className="flex justify-center mt-8">
                             <button
                                 disabled={!selectedStyle || isLoading}
-                                onClick={handleGenerate}
-                                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-indigo-100 transition-all hover:-translate-y-1"
+                                onClick={() => handleGenerate()}
+                                className="hidden sm:flex w-full sm:w-auto items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl shadow-indigo-100 transition-all hover:-translate-y-1"
                             >
                                 {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Sparkles className="w-5 h-5" />}
                                 Generate My Headshot
