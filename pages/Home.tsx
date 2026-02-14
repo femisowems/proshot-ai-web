@@ -25,6 +25,9 @@ import { HeadshotStyle } from '../types';
 import { generateHeadshot, editHeadshot } from '../services/gemini';
 import { resizeImage } from '../utils/image';
 import { Footer } from '../components/Footer';
+import { LinkedInPreviewCard } from '../components/LinkedInPreviewCard';
+import { useScrollToLinkedInPreview } from '../hooks/useScrollToLinkedInPreview';
+import { ResultActionsBar } from '../components/ResultActionsBar';
 
 const SUGGESTED_PROMPTS = [
     "Make me look more confident and approachable",
@@ -54,6 +57,8 @@ const Home: React.FC = () => {
     });
     const [error, setError] = useState<string | null>(null);
     const [cropStatus, setCropStatus] = useState<boolean | null>(null);
+    const [showLinkedInPreview, setShowLinkedInPreview] = useState(false);
+    const { previewRef, isHighlighted, scrollToPreview } = useScrollToLinkedInPreview();
 
     // 4x Variation State
     const [results, setResults] = useState<GeneratedHeadshot[]>([]);
@@ -146,6 +151,7 @@ const Home: React.FC = () => {
         setSelectedId(null);
         setError(null);
         setCropStatus(null);
+        setShowLinkedInPreview(false);
         handleRefreshSuggestions();
     };
 
@@ -351,30 +357,18 @@ const Home: React.FC = () => {
                             </div>
 
                             {/* Actions Bar */}
-                            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <a
-                                    href={results.find(r => r.id === selectedId)?.url}
-                                    download={`proshot-headshot-${selectedId}.png`}
-                                    className={`flex items-center justify-center gap-2 bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg hover:-translate-y-1 ${!selectedId ? 'opacity-50 pointer-events-none' : ''}`}
-                                >
-                                    <Download className="w-5 h-5" />
-                                    Download Selected
-                                </a>
-                                <button
-                                    onClick={() => setStep(AppStep.STYLE)}
-                                    className="flex items-center justify-center px-6 py-3 rounded-xl font-medium text-gray-600 hover:bg-gray-100 transition-colors"
-                                >
-                                    <ArrowLeft className="w-4 h-4 mr-2" />
-                                    Change Style
-                                </button>
-                                <button
-                                    onClick={reset}
-                                    className="flex items-center justify-center px-6 py-3 rounded-xl font-medium text-gray-600 hover:bg-gray-100 transition-colors"
-                                >
-                                    <RotateCcw className="w-4 h-4 mr-2" />
-                                    Start Over
-                                </button>
-                            </div>
+                            {/* Actions Bar */}
+                            <ResultActionsBar
+                                selectedImageUrl={results.find(r => r.id === selectedId)?.url}
+                                selectedId={selectedId}
+                                onDownload={() => { }} // Download handled by link in component
+                                onPreviewLinkedIn={() => {
+                                    setShowLinkedInPreview(true);
+                                    setTimeout(scrollToPreview, 100);
+                                }}
+                                onChangeStyle={() => setStep(AppStep.STYLE)}
+                                onStartOver={reset}
+                            />
 
                             {/* Gallery */}
                             <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100">
@@ -453,6 +447,20 @@ const Home: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
+
+                            {/* LinkedIn Preview Section */}
+                            {showLinkedInPreview && selectedId && (
+                                <section
+                                    id="linkedin-preview"
+                                    ref={previewRef}
+                                    className={`scroll-mt-24 transition-all duration-700 rounded-2xl ${isHighlighted ? 'ring-2 ring-indigo-500/60 ring-offset-4 shadow-lg scale-[1.01]' : ''}`}
+                                    tabIndex={-1} // Allow focus
+                                >
+                                    <LinkedInPreviewCard
+                                        photoUrl={results.find(r => r.id === selectedId)?.url || ''}
+                                    />
+                                </section>
+                            )}
                         </div>
                     </div>
                 )}
