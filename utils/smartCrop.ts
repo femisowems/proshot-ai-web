@@ -113,7 +113,8 @@ export async function smartCropToHeadshot(file: File): Promise<{ file: File; was
                 // Expand height by ~2.6x to include headroom and chest
 
                 // Base size on the face width (usually more consistent than height)
-                const cropSize = faceW * 2.5;
+                // Increased from 2.5 to 3.2 to include more shoulders and prevent "aggressive" cropping
+                const cropSize = faceW * 3.2;
 
                 // 3. Calculate Crop Origin (Top-Left)
                 // Center horizontally on the face center
