@@ -25,9 +25,10 @@ import { HeadshotStyle } from '../types';
 import { generateHeadshot, editHeadshot } from '../services/gemini';
 import { resizeImage } from '../utils/image';
 import { Footer } from '../components/Footer';
-import { LinkedInPreviewCard } from '../components/LinkedInPreviewCard';
-import { useScrollToLinkedInPreview } from '../hooks/useScrollToLinkedInPreview';
+import { LinkedInPreviewModal } from '../components/LinkedInPreviewModal';
+import { ResumePreviewModal } from '../components/ResumePreviewModal';
 import { ResultActionsBar } from '../components/ResultActionsBar';
+import { BusinessCardPreviewModal } from '../components/BusinessCardPreviewModal';
 
 const SUGGESTED_PROMPTS = [
     "Make me look more confident and approachable",
@@ -58,7 +59,8 @@ const Home: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [cropStatus, setCropStatus] = useState<boolean | null>(null);
     const [showLinkedInPreview, setShowLinkedInPreview] = useState(false);
-    const { previewRef, isHighlighted, scrollToPreview } = useScrollToLinkedInPreview();
+    const [showResumePreview, setShowResumePreview] = useState(false);
+    const [showBusinessCardPreview, setShowBusinessCardPreview] = useState(false);
 
     // 4x Variation State
     const [results, setResults] = useState<GeneratedHeadshot[]>([]);
@@ -152,14 +154,16 @@ const Home: React.FC = () => {
         setError(null);
         setCropStatus(null);
         setShowLinkedInPreview(false);
+        setShowResumePreview(false);
+        setShowBusinessCardPreview(false);
         handleRefreshSuggestions();
     };
 
     return (
         <div className="min-h-screen flex flex-col">
             {/* Header */}
-            <header className="bg-white border-b border-gray-200 py-4 px-6 flex justify-between items-center sticky top-0 z-10">
-                <div className="flex items-center gap-2" onClick={reset} style={{ cursor: 'pointer' }}>
+            <header className="bg-white border-b border-gray-200 py-4 px-6 flex md:grid md:grid-cols-3 justify-between items-center sticky top-0 z-10">
+                <div className="flex items-center gap-2 md:justify-self-start" onClick={reset} style={{ cursor: 'pointer' }}>
                     <div className="bg-indigo-600 p-2 rounded-lg">
                         <Camera className="text-white w-6 h-6" />
                     </div>
@@ -168,7 +172,7 @@ const Home: React.FC = () => {
                     </h1>
                 </div>
 
-                <div className="hidden md:flex items-center gap-4 text-sm font-medium">
+                <div className="hidden md:flex items-center gap-4 text-sm font-medium md:justify-self-center">
                     <span className={`flex items-center gap-1 ${step === AppStep.UPLOAD ? 'text-indigo-600' : 'text-gray-400'}`}>
                         <span className="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center border border-indigo-200">1</span> Upload
                     </span>
@@ -184,7 +188,7 @@ const Home: React.FC = () => {
 
                 <button
                     onClick={reset}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+                    className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 md:justify-self-end"
                     title="Reset session"
                 >
                     <RotateCcw className="w-5 h-5" />
@@ -362,10 +366,9 @@ const Home: React.FC = () => {
                                 selectedImageUrl={results.find(r => r.id === selectedId)?.url}
                                 selectedId={selectedId}
                                 onDownload={() => { }} // Download handled by link in component
-                                onPreviewLinkedIn={() => {
-                                    setShowLinkedInPreview(true);
-                                    setTimeout(scrollToPreview, 100);
-                                }}
+                                onPreviewLinkedIn={() => setShowLinkedInPreview(true)}
+                                onPreviewResume={() => setShowResumePreview(true)}
+                                onPreviewBusinessCard={() => setShowBusinessCardPreview(true)}
                                 onChangeStyle={() => setStep(AppStep.STYLE)}
                                 onStartOver={reset}
                             />
@@ -447,27 +450,33 @@ const Home: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-
-                            {/* LinkedIn Preview Section */}
-                            {showLinkedInPreview && selectedId && (
-                                <section
-                                    id="linkedin-preview"
-                                    ref={previewRef}
-                                    className={`scroll-mt-24 transition-all duration-700 rounded-2xl ${isHighlighted ? 'ring-2 ring-indigo-500/60 ring-offset-4 shadow-lg scale-[1.01]' : ''}`}
-                                    tabIndex={-1} // Allow focus
-                                >
-                                    <LinkedInPreviewCard
-                                        photoUrl={results.find(r => r.id === selectedId)?.url || ''}
-                                    />
-                                </section>
-                            )}
                         </div>
+
+
                     </div>
                 )}
-            </main>
+            </main >
 
             <Footer />
-        </div>
+
+            <LinkedInPreviewModal
+                isOpen={showLinkedInPreview}
+                onClose={() => setShowLinkedInPreview(false)}
+                photoUrl={results.find(r => r.id === selectedId)?.url || ''}
+            />
+
+            <ResumePreviewModal
+                isOpen={showResumePreview}
+                onClose={() => setShowResumePreview(false)}
+                photoUrl={results.find(r => r.id === selectedId)?.url || ''}
+            />
+
+            <BusinessCardPreviewModal
+                isOpen={showBusinessCardPreview}
+                onClose={() => setShowBusinessCardPreview(false)}
+                photoUrl={results.find(r => r.id === selectedId)?.url || ''}
+            />
+        </div >
     );
 };
 
