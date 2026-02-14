@@ -341,7 +341,7 @@ const Home: React.FC = () => {
                                     <img
                                         src={sourceImage}
                                         alt="Source"
-                                        className="w-full h-full object-cover object-center translate-y-[-6%] opacity-50 grayscale"
+                                        className="w-full h-full object-cover object-center translate-y-[-16%] opacity-50 grayscale"
                                     />
                                 )}
                             </div>
