@@ -354,7 +354,7 @@ const Home: React.FC = () => {
                                 {selectedId && (
                                     <img
                                         src={results.find(r => r.id === selectedId)?.url}
-                                        className="w-full h-full object-cover rounded-[1.25rem]"
+                                        className="w-full h-full object-cover object-top rounded-[1.25rem]"
                                         alt="Selected Headshot"
                                     />
                                 )}
