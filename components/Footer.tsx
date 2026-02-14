@@ -11,7 +11,7 @@ export const Footer: React.FC = () => {
                     <Link to="/terms" className="hover:text-gray-600">Terms of Service</Link>
                 </div>
                 <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded-full font-medium">
-                    v{__APP_VERSION__} • {new Date(__BUILD_TIMESTAMP__).toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).replace(',', '')}
+                    v{__APP_VERSION__} • {__BUILD_TIMESTAMP__}
                 </span>
             </div>
         </footer>
