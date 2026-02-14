@@ -112,7 +112,7 @@ const TermsOfService: React.FC = () => {
                         </p>
                         <div className="flex items-center gap-2 text-indigo-600 font-medium bg-indigo-50 p-4 rounded-xl inline-flex mt-2">
                             <Mail className="w-5 h-5" />
-                            <a href="mailto:legal@proshot.ai">legal@proshot.ai</a>
+                            <a href="mailto:proshot@ssowemimo.com">proshot@ssowemimo.com</a>
                         </div>
                     </section>
                 </div>
