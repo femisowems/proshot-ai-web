@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     define: {
       __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
-      __BUILD_TIMESTAMP__: JSON.stringify(new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })),
+      __BUILD_TIMESTAMP__: JSON.stringify(new Date().toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ', ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false })),
     },
     resolve: {
       alias: {
